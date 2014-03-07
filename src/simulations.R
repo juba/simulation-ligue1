@@ -31,23 +31,3 @@ table15 <- rbindlist(resultats)
 cache("table15")
 
 
-## Visualisation des résultats
-
-tab <- table15
-
-moy <- tab %.% group_by(eq) %.% summarize(moyenne=mean(points))
-moy <- moy[order(moy$moyenne, decreasing=TRUE),]
-moy
-
-tab$eq <- factor(tab$eq, levels=rev(moy$eq))
-ggplot(data=tab) +
-    geom_boxplot(aes(x=eq,y=points)) +
-    scale_x_discrete("Équipe") +
-    scale_y_continuous("Nombre de points") +
-    coord_flip()
-
-
-library(questionr)
-library(knitr)
-tapply(tab$classement, tab$eq, freq, exclude=NA)
-
