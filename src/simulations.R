@@ -1,6 +1,7 @@
 ## Test
 
 library(parallel)
+options(mc.cores=detectCores())
 
 library(ProjectTemplate)
 load.project()
