@@ -35,8 +35,8 @@ table.probas <- function(d, derniers=NULL) {
 
 calcule.probas <- function(eq.dom, eq.ext, probas) {
     ## Extraction des pourcentages des deux équipes
-    dom <- probas[probas$eq==eq.dom & dom=="eq.dom"]
-    ext <- probas[probas$eq==eq.ext & dom=="eq.ext"]
+    dom <- probas[probas$eq==eq.dom & probas$dom=="eq.dom"]
+    ext <- probas[probas$eq==eq.ext & probas$dom=="eq.ext"]
     ## Calcul des probas
     p.dom <- mean(c(dom$prob.g, ext$prob.p))
     p.nul <- mean(c(dom$prob.n, ext$prob.n))
@@ -90,7 +90,8 @@ calcule.points <- function(d) {
 ## les matchs passés. `probas` est le tableau des pourcentages de victoires, nuls 
 ## et défaites calculé avec `table.probas`
 
-simulation <- function(probas) {
+simulation <- function(i, probas) {
+    cat(".")
     current <- d
     tmp <- current[is.na(current$result),]
     current$result[is.na(current$result)] <- mapply(calcule.resultat, tmp$eq.dom, tmp$eq.ext, MoreArgs=list(probas=probas))
