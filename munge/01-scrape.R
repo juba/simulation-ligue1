@@ -2,6 +2,7 @@
 ## et du calendrier des matchs à venir depuis le site maxiffot.fr
 
 library(ProjectTemplate)
+load.project()
 library(XML)
 
 url <- "http://www.maxifoot.fr/calendrier-ligue1.php"
