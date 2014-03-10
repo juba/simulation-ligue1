@@ -107,132 +107,21 @@ obtenus et 1000 classements à la fin du championnat.
 
 ## Moyenne des points
 
-On peut regarder d'abord le nombre de points obtenus en moyenne par chaque équipe
-lors des 1000 simulations, et le classement qui en découle :
+On pourrait regarder d'abord le nombre de points obtenus en moyenne par chaque équipe
+lors des 1000 simulations, et le classement qui en découle. Le tableau correspondant
+était affiché dans une précédente version de ce billet, mais j'ai décidé de le retirer,
+car celui-ci est fondamentalement trompeur.
 
-<i class="icon-question-sign icon-2x icon-popover pull-left" data-toggle="popover"
-data-original-title="Lecture" data-content="Sur les 1000 simulations, le Paris SG 
-a obtenu en moyenne 83,48 points">
-</i>
 
-<table>
- <thead>
-  <tr>
-   <th> Équipe </th>
-   <th> Moyenne </th>
-   <th> Classement </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td> Paris SG </td>
-   <td> 83.48 </td>
-   <td>  1 </td>
-  </tr>
-  <tr>
-   <td> Monaco </td>
-   <td> 76.58 </td>
-   <td>  2 </td>
-  </tr>
-  <tr>
-   <td> St Etienne </td>
-   <td> 67.34 </td>
-   <td>  3 </td>
-  </tr>
-  <tr>
-   <td> Lille </td>
-   <td> 65.24 </td>
-   <td>  4 </td>
-  </tr>
-  <tr>
-   <td> Marseille </td>
-   <td> 61.06 </td>
-   <td>  5 </td>
-  </tr>
-  <tr>
-   <td> Reims </td>
-   <td> 59.53 </td>
-   <td>  6 </td>
-  </tr>
-  <tr>
-   <td> Lyon </td>
-   <td> 57.87 </td>
-   <td>  7 </td>
-  </tr>
-  <tr>
-   <td> Bordeaux </td>
-   <td> 56.25 </td>
-   <td>  8 </td>
-  </tr>
-  <tr>
-   <td> Toulouse </td>
-   <td> 52.15 </td>
-   <td>  9 </td>
-  </tr>
-  <tr>
-   <td> Bastia </td>
-   <td> 51.95 </td>
-   <td> 10 </td>
-  </tr>
-  <tr>
-   <td> Lorient </td>
-   <td> 48.56 </td>
-   <td> 11 </td>
-  </tr>
-  <tr>
-   <td> Montpellier </td>
-   <td> 47.39 </td>
-   <td> 12 </td>
-  </tr>
-  <tr>
-   <td> Guingamp </td>
-   <td> 44.51 </td>
-   <td> 13 </td>
-  </tr>
-  <tr>
-   <td> Nantes </td>
-   <td> 43.77 </td>
-   <td> 14 </td>
-  </tr>
-  <tr>
-   <td> Rennes </td>
-   <td> 41.40 </td>
-   <td> 15 </td>
-  </tr>
-  <tr>
-   <td> Nice </td>
-   <td> 40.94 </td>
-   <td> 16 </td>
-  </tr>
-  <tr>
-   <td> Evian TG </td>
-   <td> 39.02 </td>
-   <td> 17 </td>
-  </tr>
-  <tr>
-   <td> Valenciennes </td>
-   <td> 36.20 </td>
-   <td> 18 </td>
-  </tr>
-  <tr>
-   <td> Sochaux </td>
-   <td> 35.48 </td>
-   <td> 19 </td>
-  </tr>
-  <tr>
-   <td> AC Ajaccio </td>
-   <td> 22.75 </td>
-   <td> 20 </td>
-  </tr>
-</tbody>
-</table>
 
 
 La moyenne n'est qu'un résumé, elle n'est donc pas très intéressante car elle 
 écrase toutes les variations : quels ont été le nombre minimal et le nombre maximal
 de points obtenus par chaque équipe ? Quels étaient les nombres de points les plus
-fréquents ?
-
+fréquents ? En ne donnant qu'un classement basé sur la moyenne des points obtenus,
+on peut faire croire que les résultats de ces simulations conduisent à fabriquer un
+unique classement, alors qu'il est beaucoup plus intéressant de parler en termes de
+variabilité des points obtenus, et de probabilités de classement pour chaque équipe.
 
 ## Variation du nombre de points obtenus
 

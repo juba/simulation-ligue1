@@ -140,29 +140,27 @@ obtenus et 1000 classements à la fin du championnat.
 
 ## Moyenne des points
 
-On peut regarder d'abord le nombre de points obtenus en moyenne par chaque équipe
-lors des 1000 simulations, et le classement qui en découle :
+On pourrait regarder d'abord le nombre de points obtenus en moyenne par chaque équipe
+lors des 1000 simulations, et le classement qui en découle. Le tableau correspondant
+était affiché dans une précédente version de ce billet, mais j'ai décidé de le retirer,
+car celui-ci est fondamentalement trompeur.
 
-<i class="icon-question-sign icon-2x icon-popover pull-left" data-toggle="popover"
-data-original-title="Lecture" data-content="Sur les 1000 simulations, le Paris SG 
-a obtenu en moyenne 83,48 points">
-</i>
-
-```{r tab_moy, results='asis'}
+```{r tab_moy, results='hide'}
 tab <- table15
 moy <- tab %.% group_by(eq) %.% summarize(moyenne=mean(points))
 moy <- moy[order(moy$moyenne, decreasing=TRUE),]
 moy$classement <- 1:20
 tab$eq <- factor(tab$eq, levels=rev(moy$eq))
 setnames(moy, c("Équipe", "Moyenne", "Classement"))
-kable(moy)
 ```
 
 La moyenne n'est qu'un résumé, elle n'est donc pas très intéressante car elle 
 écrase toutes les variations : quels ont été le nombre minimal et le nombre maximal
 de points obtenus par chaque équipe ? Quels étaient les nombres de points les plus
-fréquents ?
-
+fréquents ? En ne donnant qu'un classement basé sur la moyenne des points obtenus,
+on peut faire croire que les résultats de ces simulations conduisent à fabriquer un
+unique classement, alors qu'il est beaucoup plus intéressant de parler en termes de
+variabilité des points obtenus, et de probabilités de classement pour chaque équipe.
 
 ## Variation du nombre de points obtenus
 
