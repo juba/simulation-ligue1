@@ -16,6 +16,8 @@ for (i in 1:length(tables)) {
 
 d <- rbindlist(tables)
 
+## Recodages
+
 d <- within(d, {
     ## Matchs à venir
     score[score=="-"] <- NA
