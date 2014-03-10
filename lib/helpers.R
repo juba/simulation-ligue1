@@ -1,21 +1,24 @@
 ## Fonctions utilisées dans les autres scripts
 
 
-## Renvoit pour chaque équipe les pourcentages de victoires, nuls et défaites,
-## à domicile et à l'extérieur. Prend comme argument `d`, le tableau de données
-## des résultats et du calendrier, et `derniers`, le nombre des dernières journées
-## à retenir pour le calcul (par défaut, toutes les journées passées sont retenues)
+#' Renvoit pour chaque équipe les pourcentages de victoires, nuls et défaites,
+#' à domicile et à l'extérieur. Prend comme argument `d`, le tableau de données
+#' des résultats et du calendrier, `derniers`, le nombre des dernières journées
+#' à retenir pour le calcul (par défaut, toutes les journées passées sont retenues),
+#' et `journee`, la journée considérée comme la dernière.
 
-table.probas <- function(d, derniers=NULL) {
+table.probas <- function(d, derniers=NULL, journee=NULL) {
     ## Filtre les journées à venir
-    tmp <- d[!is.na(d$result),]
+    if (is.null(journee)) 
+        sel <- !is.na(d$result)
+    else 
+        sel <- d$journee <= journee
+    tmp <- d[sel,]
     ## Filtre sur les dernières journées si nécessaire
-    if (!is.null(derniers)) {
-        derniere.journee <- max(tmp$journee)
-        tmp <- tmp[tmp$journee >= (derniere.journee - derniers + 1),]
-    }
+    if (!is.null(derniers))
+        tmp <- tmp[tmp$journee > (max(tmp$journee) - derniers),]
     ## Passage en format "long"
-    tmp <- melt(tmp,measure.vars=c("eq.dom", "eq.ext"),id.vars=c("result"))
+    tmp <- melt(tmp,measure.vars=c("dom", "ext"),id.vars=c("result"))
     setnames(tmp, c("result","dom","eq"))
     ## Recodage des résultats
     tmp$res <- "P"
@@ -24,50 +27,22 @@ table.probas <- function(d, derniers=NULL) {
     ## Calcul des pourcentages
     tmp <- tmp %.% group_by(eq,dom) %.% summarize(nb=n(), n=sum(res=="N"), g=sum(res=="G"), p=sum(res=="P"))
     tmp <- tmp %.% mutate(prob.g=g/nb,prob.n=n/nb,prob.p=p/nb)
+    ## Retour en format "large"
+    tmp <- reshape(tmp, direction="wide", idvar="eq", timevar="dom")
+    tmp <- tmp[,list(eq,prob.g.dom,prob.p.dom,prob.g.ext,prob.p.ext)]
+    tmp <- data.table(tmp, key="eq")
     return(tmp)
 }
 
 
-## Calcule les probabilités de victoire à domicile, nul, et victoire à l'extérieur,
-## pour un match donné. `eq.dom` est le nom de l'équipe à domicile, `eq.ext` l'équipe
-## jouant à l'extérieur, et `probas` le tableau des pourcentages de victoires, nuls
-## et défaites calculé avec `table.probas`
-
-calcule.probas <- function(eq.dom, eq.ext, probas) {
-    ## Extraction des pourcentages des deux équipes
-    dom <- probas[probas$eq==eq.dom & probas$dom=="eq.dom"]
-    ext <- probas[probas$eq==eq.ext & probas$dom=="eq.ext"]
-    ## Calcul des probas
-    p.dom <- mean(c(dom$prob.g, ext$prob.p))
-    p.nul <- mean(c(dom$prob.n, ext$prob.n))
-    p.ext <- mean(c(dom$prob.p, ext$prob.g))
-    result <- list(p.dom=p.dom, p.nul=p.nul, p.ext=p.ext)
-    return(result)
-}
-
-## Tire au sort le résultat d'un match. `eq.dom` est le nom de l'équipe à domicile, 
-## `eq.ext` l'équipe jouant à l'extérieur, et `probas` le tableau des pourcentages 
-## de victoires, nuls et défaites calculé avec `table.probas`
-
-calcule.resultat <- function(eq.dom, eq.ext, probas) {
-    ## Calcul des probabilités de victoire à domicile, nul, à l'extérieur
-    prob <- calcule.probas(eq.dom, eq.ext, probas)
-    ## Tirage au sort
-    alea <- runif(1)
-    result <- "nul"
-    if (alea<prob$p.dom) result <- "eq.dom"
-    if (alea>(1-prob$p.ext)) result <- "eq.ext"
-    return(result)
-}
-
-## Calcule le nombre de points et le classement de chaque équipe à partir d'un 
-## tableau de résultats `d`.
+#' Calcule le nombre de points et le classement de chaque équipe à partir d'un 
+#' tableau de résultats `d`.
 
 calcule.points <- function(d) {
     ## Filtre les dates à venir
     tmp <- d[!is.na(d$result),]
     ## Passage en format "long"
-    tmp <- melt(tmp,measure.vars=c("eq.dom", "eq.ext"),id.vars=c("result"))
+    tmp <- melt(tmp,measure.vars=c("dom", "ext"),id.vars=c("result"))
     setnames(tmp, c("result","dom","eq"))
     ## Recodage du nombre de points par match
     tmp$res <- 0
@@ -78,23 +53,45 @@ calcule.points <- function(d) {
     ## Points de pénalité pour Nantes et Bastia
     tmp$points[tmp$eq=="Nantes"] <- tmp$points[tmp$eq=="Nantes"]-1
     tmp$points[tmp$eq=="Bastia"] <- tmp$points[tmp$eq=="Bastia"]+2
-    ## Tri et ajout du classement
+    ## Ajout du classement
     tmp <- tmp[order(tmp$points, decreasing=TRUE),]
-    tmp$classement <- 1:20
+    tmp$classement <- 1:nrow(tmp)
     return(tmp)
 }
 
 
-## Fonction lançant une simulation de fin de championnat, en tirant au sort le
-## résultat de chaque match à venir en fonction des probabilités observées sur
-## les matchs passés. `probas` est le tableau des pourcentages de victoires, nuls 
-## et défaites calculé avec `table.probas`
+#' Fonction lançant une simulation de fin de championnat, en tirant au sort le
+#' résultat de chaque match à venir en fonction des probabilités observées sur
+#' les matchs passés. `d` est le tableau du calendrier, `probas` est le tableau 
+#' des pourcentages de victoires, nuls et défaites calculé avec `table.probas`,
+#' `journee` permet optionnellement de spécifier quelle journée doit être considérée
+#' comme la dernière.
 
-simulation <- function(i, probas) {
-    cat(".")
+simulation <- function(i, d, probas, journee=NULL) {
+    ## Sélection des matchs à venir
+    if (is.null(journee)) 
+        sel <- is.na(d$result)
+    else 
+        sel <- d$journee > journee
     current <- d
-    tmp <- current[is.na(current$result),]
-    current$result[is.na(current$result)] <- mapply(calcule.resultat, tmp$eq.dom, tmp$eq.ext, MoreArgs=list(probas=probas))
+    tmp <- current[sel,]
+    
+    ## Fusion des probabilités de victoire et défaite des
+    ## différentes équipes
+    g.dom <- probas[tmp$dom,"prob.g.dom",with=FALSE]
+    p.dom <- probas[tmp$dom,"prob.p.dom",with=FALSE]
+    g.ext <- probas[tmp$ext,"prob.g.ext",with=FALSE]
+    p.ext <- probas[tmp$ext,"prob.p.ext",with=FALSE]
+    ## Calcul des probas de victoire à domicile ou à l'extérieur
+    tmp$p.dom <- (g.dom + p.ext) / 2
+    tmp$p.ext <- (g.ext + p.dom) / 2
+    ## Tirage au sort du résultat
+    alea <- runif(nrow(tmp))
+    tmp$result <- "nul"
+    tmp$result[alea<tmp$p.dom] <- "dom"
+    tmp$result[alea>(1-tmp$p.ext)] <- "ext"
+    ## Fusion des résultats calculés et calcul des points
+    current$result[sel] <- tmp$result
     calcule.points(current)
 }
 
