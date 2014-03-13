@@ -21,8 +21,8 @@ opts_chunk$set(fig.path="images/2014-03-06-simulation-ligue1/",
                tidy=TRUE,
                highlight=TRUE,
                comment=NA,
-               message=FALSE,
-               warning=FALSE,
+               message=TRUE,
+               warning=TRUE,
                background=".95;.95;.95",
                out.format="jekyll",
                dev="png",
@@ -34,12 +34,9 @@ options(knitr.table.format = 'html')
 ```
 
 ```{r load, echo=FALSE, results="hide", cache=FALSE, message=FALSE}
-root.dir <- "/home/julien/stats/simulation-ligue1/"
-setwd(root.dir)
-library(ProjectTemplate)
-load.project()
-load("cache/table15.RData")
-load("cache/table.all.RData")
+library(dplyr)
+library(data.table)
+load("data/table15.RData")
 
 derniere.journee <- 27
 ```

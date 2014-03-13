@@ -21,9 +21,5 @@ clean :
 	if [ -d cache ]; then  rm -rf cache/; fi
 	if [ -d out ]; then  rm -rf out/; fi
 	if [ -e $(MDFILE) ]; then rm $(MDFILE); fi
-	if [ -e $(PDFFILE) ]; then rm $(PDFFILE); fi
-	if [ -e $(HTMLFILE) ]; then rm $(HTMLFILE); fi
-	if [ -e $(RAWHTMLFILE) ]; then rm $(RAWHTMLFILE); fi	
-	if [ -e $(TEXFILE) ]; then rm $(TEXFILE); fi		
 
 
