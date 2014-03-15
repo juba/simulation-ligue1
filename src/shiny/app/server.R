@@ -1,9 +1,15 @@
 
 shinyServer(function(input, output) {
 
-    filepath <- reactive({
+    imagepath <- reactive({
         tmp <- gsub(" ","_", paste(input$championnat, saison, sep="/"))
         tmp <- file.path("data/", tmp)
+        tmp
+    })
+    
+    loadpath <- reactive({
+        tmp <- gsub(" ","_", paste(input$championnat, saison, sep="/"))
+        tmp <- file.path("www/data/", tmp)
         tmp
     })
     
@@ -17,7 +23,7 @@ shinyServer(function(input, output) {
     
     tab <- reactive({
         filename <- paste0(input$journee,"_probas_",input$dyn,".Rdata")
-        file <- file.path(filepath(), filename)
+        file <- file.path(loadpath(), filename)
         load(file) # tab
         tab        
     })
@@ -34,17 +40,19 @@ shinyServer(function(input, output) {
         selectInput("classement", "Classement :", as.list(choices))
     })
         
-    output$pointsViolin <- renderImage({
+    output$pointsViolin <- renderText({
         filename <- paste0(input$journee,"_violin_",input$dyn,".png")
-        file <- file.path(filepath(), filename)
-        return(list(src=file, width=700, height=600))
-    }, deleteFile=FALSE)
+        file <- file.path(imagepath(), filename)
+        out <- paste0('<img src="',file,'" width="700" height="600" alt="Violin plot" />')
+        HTML(out)
+    })
     
-    output$classProbs <- renderImage({
+    output$classProbs <- renderText({
         filename <- paste0(input$journee,"_probas_",input$dyn,".png")
-        file <- file.path(filepath(), filename)
-        return(list(src=file, width=700, height=700))
-    }, deleteFile=FALSE)
+        file <- file.path(imagepath(), filename)
+        out <- paste0('<img src="',file,'" width="700" height="700" alt="Violin plot" />')
+        HTML(out)
+    })
     
     output$tabProbEq <- renderTable({
         tab <- tab()

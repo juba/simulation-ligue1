@@ -1,4 +1,4 @@
 library(shiny)
 
-load("data/datas.Rdata") # datas
+load("www/data/datas.Rdata") # datas
 saison <- "2013-2014"

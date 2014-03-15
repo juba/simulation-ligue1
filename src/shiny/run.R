@@ -9,7 +9,7 @@ options(mc.cores=detectCores())
 
 ## Création du répertoire de stockage des images et données
 file.base <- gsub(" ","_", paste(championnat, saison, sep="/"))
-file.base <- file.path("src/shiny/data/", file.base)
+file.base <- file.path("src/shiny/app/www/data/", file.base)
 dir.create(file.base, recursive=TRUE)
 
 
@@ -107,10 +107,10 @@ probas.table(tab5)
 
 ## datas contient la liste des données disponibles (championnat, saison, journée
 ## dynamique)
-load("src/shiny/data/datas.Rdata")
+load("src/shiny/app/www/data/datas.Rdata")
 #datas <- data.frame(championnat=championnat, saison=saison, journee=journee, derniers="saison", stringsAsFactors=FALSE)
 datas <- rbind(datas, c(championnat, saison, journee, "saison"))
 datas <- rbind(datas, c(championnat, saison, journee, "15j"))
 datas <- rbind(datas, c(championnat, saison, journee, "5j"))
 datas <- unique(datas)
-save(datas, file="src/shiny/data/datas.Rdata")
+save(datas, file="src/shiny/app/www/data/datas.Rdata")
