@@ -11,6 +11,11 @@ category: posts
 
 
 
+<div class="alert">
+ Il y a désormais une <a href="/app/sim/">application en ligne</a>, régulièrement
+ mise à jour, pour visualiser les résultats des simulations de différents championnats.
+</div>
+
 # C'est quoi ?
 
 La fin du championnat approchant, les mêmes questions reviennent fréquemment : le
@@ -188,5 +193,15 @@ chances de descendre en L2, contre un peu plus de 60% pour Valenciennes. À l'in
 
 
 
+# Liens
+
+Les résultats et le calendrier des matchs sont extraits automatiquement de
+[la page Calendrier](http://www.maxifoot.fr/calendrier-ligue1.php) du site
+Maxifoot.
+
+[Fabien Torre](http://www.grappa.univ-lille3.fr/~torre/Football/) met également
+en ligne, et depuis bien plus longtemps, des simulations de fins de championnat,
+avec une méthode différente mais assez semblable (je n'avais pas connaissance de 
+ses travaux avant d'avoir développé cette application).
 
 
