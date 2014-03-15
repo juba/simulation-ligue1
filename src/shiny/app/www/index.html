@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script src="shared/jquery.js" type="text/javascript"></script>
+  <script src="shared/shiny.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="shared/shiny.css"/>
+  <link rel="stylesheet" type="text/css" href="shared/slider/css/jquery.slider.min.css"/>
+  <script src="shared/slider/js/jquery.slider.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="shared/bootstrap/css/bootstrap.min.css"/>
+  <script src="shared/bootstrap/js/bootstrap.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" type="text/css" href="shared/bootstrap/css/bootstrap-responsive.min.css"/>
+
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="perso.css"/>
+  <link rel="shortcut icon" href="http://data.nozav.org/favicon.ico">
+
+
+  
+  <title>Simulations de fins de championnats</title>
+</head>
+<body>
+  <div class="navbar navbar-fixed-top">
+    <div class="container">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">data.nozav.org</a>
+      <div class="nav-collapse collapse navbar-responsive-collapse">
+        <ul class="nav navbar-nav pull-right hidden-print">
+          <li>
+            <a class="hidden-sm" title="Twitter" href="https://twitter.com/nozav">
+              <i class="icon-twitter icon-large"></i>
+            </a>
+            <a class="visible-sm" title="Twitter" href="https://twitter.com/nozav">
+              <i class="icon-twitter icon-large"></i>
+              Twitter
+            </a>
+          </li>
+	  <li>
+            <a class="hidden-sm" title="À propos" href="/about.html">
+              <i class="icon-user icon-large"></i>
+            </a>
+            <a class="visible-sm" title="À propos" href="/about.html">
+              <i class="icon-user icon-large"></i>
+              À propos
+            </a>
+          </li>
+          <li>
+            <a class="hidden-sm" href="/atom.xml" title="Atom Feed">
+              <i class="icon-rss icon-large"></i>
+            </a>
+            <a class="visible-sm" href="/atom.xml" title="Atom Feed">
+              <i class="icon-rss icon-large"></i>
+              Atom Feed
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>  
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12" style="padding: 10px 0px;">
+      <h1>Simulations de fins de championnats</h1>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span4">
+      <form class="well">
+        <label class="control-label" for="championnat">Championnat :</label>
+        <select id="championnat">
+          <option value="Ligue 1" selected="selected">Ligue 1</option>
+          <option value="Ligue 2">Ligue 2</option>
+        </select>
+        <div id="journee" class="shiny-html-output"></div>
+	<div id="dynamique" class="shiny-html-output shiny-bound-output">
+	  <div id="dyn" class="control-group shiny-input-radiogroup shiny-bound-input">
+	    <label class="control-label" for="dyn">Dynamique sur  :</label>
+	    <label class="radio">
+	      <input type="radio" name="dyn" id="dyn1" value="saison" checked="checked">
+	      <span>Saison entière</span>
+	    </label>
+	    <label class="radio">
+	      <input type="radio" name="dyn" id="dyn2" value="15j">
+	      <span>15 journées précédentes</span>
+	    </label>
+	    <label class="radio">
+	      <input type="radio" name="dyn" id="dyn3" value="5j">
+	      <span>5 journées précédentes</span>
+	    </label>
+	  </div>
+	</div>
+	<hr />
+	<div id="moretext" style="margin-top: 20px;">
+	  En savoir plus&nbsp;:
+	  <ul>
+	    <li><a href="http://data.nozav.org/posts/2014-03-simulation-ligue1.html">Documentation</a></li>
+	    <li><a href="https://github.com/juba/simulation-ligue1">Code source</a></li>
+	  </ul>
+	</div>
+      </form>
+    </div>
+    <div class="span8">
+      <div class="alert alert-warning  alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	Le premier affichage des simulations peut prendre quelques secondes. Merci de votre patience&nbsp;!
+      </div>
+      <div class="tabbable">
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#tab-3262-1" data-toggle="tab">Nombre de points</a>
+          </li>
+          <li>
+            <a href="#tab-3262-2" data-toggle="tab">Classement final</a>
+          </li>
+          <li>
+            <a href="#tab-3262-3" data-toggle="tab">Probabilités par équipe</a>
+          </li>
+          <li>
+            <a href="#tab-3262-4" data-toggle="tab">Probabilités par classement</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab-3262-1">
+            <div id="pointsViolin" class="shiny-image-output" style="width: 700px ; height: 600px"></div>
+          </div>
+          <div class="tab-pane" id="tab-3262-2">
+            <div id="classProbs" class="shiny-image-output" style="width: 700px ; height: 700px"></div>
+          </div>
+          <div class="tab-pane" id="tab-3262-3">
+            <div id="eq" class="shiny-html-output"></div>
+            <div id="tabProbEq" class="shiny-html-output"></div>
+          </div>
+          <div class="tab-pane" id="tab-3262-4">
+            <div id="classement" class="shiny-html-output"></div>
+            <div id="tabProbClass" class="shiny-html-output"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
