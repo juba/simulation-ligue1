@@ -12,7 +12,7 @@ table.probas <- function(d, derniers=NULL, journee=NULL) {
     if (is.null(journee)) 
         sel <- !is.na(d$result)
     else 
-        sel <- d$journee <= journee
+        sel <- d$journee <= journee & !is.na(d$result)
     tmp <- d[sel,]
     ## Filtre sur les dernières journées si nécessaire
     if (!is.null(derniers))
@@ -72,7 +72,8 @@ simulation <- function(i, d, probas, journee=NULL) {
     if (is.null(journee)) 
         sel <- is.na(d$result)
     else 
-        sel <- d$journee > journee
+        ## On inclut aussi les matchs reportés
+        sel <- d$journee > journee | is.na(d$result)
     current <- d
     tmp <- current[sel,]
     
