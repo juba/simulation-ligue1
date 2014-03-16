@@ -14,8 +14,9 @@ shinyServer(function(input, output) {
     })
     
      output$journee <- renderUI({
-         choices <- unique(datas$journee[datas$championnat==input$championnat &
-                                         datas$saison==saison])
+         tmp <- datas[datas$championnat==input$championnat &
+                      datas$saison==saison,]
+         choices <- tmp$journee.max:tmp$journee.min
          if (length(choices)==0) choices <- list(none="<Invalide>")
          selectInput("journee", "Journée :",
                      as.list(choices))
@@ -43,14 +44,14 @@ shinyServer(function(input, output) {
     output$pointsViolin <- renderText({
         filename <- paste0(input$journee,"_violin_",input$dyn,".png")
         file <- file.path(imagepath(), filename)
-        out <- paste0('<img src="',file,'" width="700" height="600" alt="Violin plot" />')
+        out <- paste0('<img src="',file,'" width="700" height="600" alt="" />')
         HTML(out)
     })
     
     output$classProbs <- renderText({
         filename <- paste0(input$journee,"_probas_",input$dyn,".png")
         file <- file.path(imagepath(), filename)
-        out <- paste0('<img src="',file,'" width="700" height="700" alt="Violin plot" />')
+        out <- paste0('<img src="',file,'" width="700" height="700" alt="" />')
         HTML(out)
     })
     

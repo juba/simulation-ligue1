@@ -108,7 +108,7 @@ probas.table(tab5)
 ## datas contient la liste des données disponibles (championnat, saison, journée
 ## dynamique)
 load("src/shiny/app/www/data/datas.Rdata")
-#datas <- data.frame(championnat=championnat, saison=saison, journee=journee, derniers="saison", stringsAsFactors=FALSE)
+##datas <- data.frame(championnat=championnat, saison=saison, journee=journee, derniers="saison", stringsAsFactors=FALSE)
 datas <- rbind(datas, c(championnat, saison, journee, "saison"))
 datas <- rbind(datas, c(championnat, saison, journee, "15j"))
 datas <- rbind(datas, c(championnat, saison, journee, "5j"))
