@@ -10,6 +10,10 @@ h1 {
     
 }
 
+.loading {
+    display: block;
+    background: url("img/loader.gif") no-repeat middle center;
+}
 
 .navbar{position:relative;padding-right:15px;padding-left:15px;margin-bottom:20px;background-color:#eee;border-radius:4px;text-transform:uppercase;}
 
