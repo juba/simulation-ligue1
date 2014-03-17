@@ -20,7 +20,7 @@ dir.create(file.base, recursive=TRUE)
 reorder.tab <- function(tab) {
     moy <- tab %.% group_by(eq) %.% summarize(moyenne=mean(points))
     moy <- moy[order(moy$moyenne, decreasing=TRUE),]
-    moy$classement <- 1:20
+    moy$classement <- 1:nrow(moy)
     tab$eq <- factor(tab$eq, levels=rev(moy$eq))
     return(tab)
 }
@@ -41,9 +41,12 @@ violin.plot <- function(tab) {
 #' Histogramme des probabilités des différents classements
 probas.plot <- function(tab) {
     tab$eq <- factor(tab$eq, levels=rev(levels(tab$eq)))
-    tab$classement <- factor(tab$classement, levels=20:1)
-    g <- ggplot(data=tab) +
-        geom_bar(aes(x=classement, y=(..count..)/sum(..count..)*20)) +
+    nb <- length(levels(tab$eq))
+    tab$classement <- factor(tab$classement, levels=nb:1)
+    tmp <- tab %.% group_by(eq, classement) %.% summarize(n=n())
+    tmp <- tmp %.% mutate(prob=n/sum(n))
+    g <- ggplot(data=tmp, aes(x=classement, y=prob)) +
+        geom_bar(stat="identity") +
         facet_grid(eq~.) +
         scale_y_continuous("Pourcentage", labels=percent_format()) +
         scale_x_discrete("Position en fin de championnat") +
@@ -59,7 +62,7 @@ probas.plot <- function(tab) {
 probas.table <- function(tab) {
     nb.rows <- nrow(tab)
     filename <- paste0(journee, "_probas_", tab$dyn[1], ".Rdata")
-    tab <- tab %.% group_by(eq,classement) %.% summarize(n=n())
+    tab <- tab %.% group_by(eq, classement) %.% summarize(n=n())
     tab <- tab %.% group_by(eq) %.% 
         mutate(prob=paste(round(n/sum(n)*100,1),"%"))
     save(tab, file=file.path(file.base,filename))
