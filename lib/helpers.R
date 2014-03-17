@@ -50,9 +50,11 @@ calcule.points <- function(d) {
     tmp$res[tmp$result=="nul"] <- 1
     ## Somme
     tmp <- tmp[,list(points=sum(res)),by="eq"]
-    ## Points de pénalité pour Nantes et Bastia
+    ## Points de pénalité pour Nantes et Bastia (Ligue 1)
     tmp$points[tmp$eq=="Nantes"] <- tmp$points[tmp$eq=="Nantes"]-1
     tmp$points[tmp$eq=="Bastia"] <- tmp$points[tmp$eq=="Bastia"]+2
+    ## Points de pénalité pour Vannes (National)    
+    tmp$points[tmp$eq=="Vannes"] <- tmp$points[tmp$eq=="Vannes"]-1
     ## Ajout du classement
     tmp <- tmp[order(tmp$points, decreasing=TRUE),]
     tmp$classement <- 1:nrow(tmp)
