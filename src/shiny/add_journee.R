@@ -14,7 +14,8 @@ add.journee <- function(championnat, saison, journee, nb.rep=5000) {
     nb.rep <- nb.rep
     ## Liste des urls par championnat
     urls <- list("Ligue 1"="http://www.maxifoot.fr/calendrier-ligue1.php",
-                 "Ligue 2"="http://www.maxifoot.fr/calendrier-ligue2.php")
+                 "Ligue 2"="http://www.maxifoot.fr/calendrier-ligue2.php",
+                 "National"="")
     
     d.url <- urls[[championnat]]
     cat("--- Scraping ---\n")
@@ -27,5 +28,7 @@ add.journee <- function(championnat, saison, journee, nb.rep=5000) {
 
 
 add.journee("Ligue 1", "2013-2014", 29, 5000)
-add.journee("Ligue 2", "2013-2014", 27, 5000)
 
+add.journee("Ligue 2", "2013-2014", 28, 5000)
+
+add.journee("National", "2013-2014", 24, 5000)
