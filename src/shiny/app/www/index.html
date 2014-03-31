@@ -82,11 +82,11 @@
 	  <div id="dyn" class="control-group shiny-input-radiogroup shiny-bound-input">
 	    <label class="control-label" for="dyn">Dynamique sur  :</label>
 	    <label class="radio">
-	      <input type="radio" name="dyn" id="dyn1" value="saison" checked="checked">
+	      <input type="radio" name="dyn" id="dyn1" value="saison">
 	      <span>Saison entière</span>
 	    </label>
 	    <label class="radio">
-	      <input type="radio" name="dyn" id="dyn2" value="15j">
+	      <input type="radio" name="dyn" id="dyn2" value="15j" checked="checked">
 	      <span>15 journées précédentes</span>
 	    </label>
         <!--
@@ -169,7 +169,7 @@
 	    <ul>
 	      <li>On passe en revue les journées déjà jouées, et on calcule le pourcentage de victoires,
 		de nuls et de défaites, à domicile et à l'extérieur, pour chaque équipe. Ce calcul
-		s'effectue soit sur toute la saison déjà écoulée, soit sur les 5 ou 15 dernières
+		s'effectue soit sur toute la saison déjà écoulée, soit sur les 15 dernières
 		journées.</li>
 	      <li>On interprète ces pourcentages de victoires/nuls/défaites pour chaque équipe comme
 		des probabilités de victoires/nuls/défaites pour les matchs à venir. On fait donc
