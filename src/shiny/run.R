@@ -95,15 +95,15 @@ invisible(probas.plot(tab15))
 probas.table(tab15)
 
 ## Méthode 3 : probas sur les 5 dernières journées
-cat("- Running 5j\n")
-probas <- table.probas(d, derniers=5, journee=journee)
-resultats <- mclapply(1:nb.rep, simulation, d, probas, journee=journee)
-tab5 <- rbindlist(resultats)
-tab5$dyn <- "5j"
-tab5 <- reorder.tab(tab5)
-invisible(violin.plot(tab5))
-invisible(probas.plot(tab5))
-probas.table(tab5)
+# cat("- Running 5j\n")
+# probas <- table.probas(d, derniers=5, journee=journee)
+# resultats <- mclapply(1:nb.rep, simulation, d, probas, journee=journee)
+# tab5 <- rbindlist(resultats)
+# tab5$dyn <- "5j"
+# tab5 <- reorder.tab(tab5)
+# invisible(violin.plot(tab5))
+# invisible(probas.plot(tab5))
+# probas.table(tab5)
 
 
 ## SAUVEGARDE -----------------------------------------------------------
