@@ -19,7 +19,7 @@ shinyServer(function(input, output) {
          choices <- tmp$journee.max:tmp$journee.min
          if (length(choices)==0) choices <- list(none="<Invalide>")
          selectInput("journee", "Journée :",
-                     as.list(choices))
+                     as.list(choices), selectize=FALSE)
      })
     
     tab <- reactive({
@@ -32,13 +32,13 @@ shinyServer(function(input, output) {
     output$eq <- renderUI({
         tab <- tab()
         choices <- sort(unique(as.character(tab$eq)))
-        selectInput("eq", "Équipe :", as.list(choices))
+        selectInput("eq", "Équipe :", as.list(choices), selectize=FALSE)
     })
 
     output$classement <- renderUI({
         tab <- tab()
         choices <- sort(unique(tab$classement))
-        selectInput("classement", "Classement :", as.list(choices))
+        selectInput("classement", "Classement :", as.list(choices), selectize=FALSE)
     })
         
     output$pointsViolin <- renderText({
