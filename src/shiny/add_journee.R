@@ -27,7 +27,7 @@ add.journee <- function(championnat, saison, journee, nb.rep=5000) {
 ## Ajout d'une nouvelle journée
 
 
-add.journee("Ligue 1", "2013-2014", 34, 5000)
+add.journee("Ligue 1", "2013-2014", 35, 5000)
 
 add.journee("Ligue 2", "2013-2014", 33, 5000)
 
