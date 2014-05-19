@@ -31,4 +31,4 @@ add.journee("Ligue 1", "2013-2014", 37, 5000)
 
 add.journee("Ligue 2", "2013-2014", 37, 5000)
 
-add.journee("National", "2013-2014", 29, 5000)
+add.journee("National", "2013-2014", 33, 5000)
