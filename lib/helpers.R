@@ -62,6 +62,36 @@ calcule.points <- function(d) {
 }
 
 
+#' Calcule le nombre de points et le classement de chaque équipe à partir d'un
+#' tableau de résultats `results` et d'une journée `jour`. Fonction utilisée
+#' pour le billet 'Bilan'.
+
+calcule.points.journee <- function(results, jour) {
+    ## Filtre les dates à venir
+    tmp <- results[results$journee<=jour,]
+    ## Passage en format "long"
+    tmp <- melt(tmp,measure.vars=c("dom", "ext"),id.vars=c("result"))
+    setnames(tmp, c("result","dom","eq"))
+    ## Recodage du nombre de points par match
+    tmp$res <- 0
+    tmp$res[tmp$result==tmp$dom] <- 3
+    tmp$res[tmp$result=="nul"] <- 1
+    ## Somme
+    tmp <- tmp[,list(points=sum(res)),by="eq"]
+    ## Points de pénalité pour Nantes et Bastia (Ligue 1)
+    tmp$points[tmp$eq=="Nantes"] <- tmp$points[tmp$eq=="Nantes"]-1
+    tmp$points[tmp$eq=="Bastia"] <- tmp$points[tmp$eq=="Bastia"]+2
+    ## Points de pénalité pour Vannes (National)
+    tmp$points[tmp$eq=="Vannes"] <- tmp$points[tmp$eq=="Vannes"]-1
+    ## Ajout du classement
+    tmp <- tmp[order(tmp$points, decreasing=TRUE),]
+    tmp$classement <- 1:nrow(tmp)
+    ## Si même nombre de points, même classement
+    tmp <- tmp %.% group_by(points) %.% mutate(classement=min(classement))
+    return(tmp)
+}
+
+
 #' Fonction lançant une simulation de fin de championnat, en tirant au sort le
 #' résultat de chaque match à venir en fonction des probabilités observées sur
 #' les matchs passés. `d` est le tableau du calendrier, `probas` est le tableau 
