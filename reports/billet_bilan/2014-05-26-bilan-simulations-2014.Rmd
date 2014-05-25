@@ -1,0 +1,196 @@
+---
+layout: post
+title: "Bilans des simulations de fin de championnat 2013/2014"
+category: posts
+--- 
+
+
+```{r knitr_init, echo=FALSE, results="asis", cache=FALSE}
+library(knitr)
+
+## Global options
+options(scipen=10000)
+options(max.print="70")
+options(prompt="R> ")
+opts_chunk$set(fig.path="images/2014-05-23-bilan-simulations-2014/",
+               opts_chunk$set(fig.cap = "center"),
+               echo=FALSE,
+               cache.path="cache/",
+               cache=FALSE,
+               prompt=TRUE,
+               tidy=TRUE,
+               highlight=TRUE,
+               comment=NA,
+               message=TRUE,
+               warning=TRUE,
+               background=".95;.95;.95",
+               out.format="jekyll",
+               dev="png",
+               fig.width=9,
+               fig.height=7)
+opts_knit$set(width=75)
+opts_knit$set(base.url="/")
+options(knitr.table.format = 'html')
+
+```
+
+```{r load, echo=FALSE, results="hide", cache=FALSE, message=FALSE}
+library(ProjectTemplate)
+load.project()
+
+library(dplyr)
+library(XML)
+library(data.table)
+library(reshape2)
+library(ggplot2)
+
+```
+
+
+```{r scrape, echo=FALSE, results="hide", cache=FALSE, message=FALSE}
+
+## Scraping des résultats de Ligue 1
+results.l1 <- scrape.championnat("http://www.maxifoot.fr/calendrier-ligue1.php")
+classements.l1 <- calcule.classements(results.l1)
+
+## Scraping des résultats de Ligue 2
+results.l2 <- scrape.championnat("http://www.maxifoot.fr/calendrier-ligue2.php")
+classements.l2 <- calcule.classements(results.l2)
+
+#cache("results.l1")
+#cache("results.l2")
+
+```
+
+```{r loadsim, echo=FALSE, results="hide", cache=FALSE, message=FALSE}
+
+## Chargement des données des simulations
+sims.l1 <- load.simulations("src/shiny/app/www/data/Ligue_1/2013-2014")
+sims.l2 <- load.simulations("src/shiny/app/www/data/Ligue_2/2013-2014")
+
+```
+
+```{r graphfun, echo=FALSE, results="hide", cache=FALSE, message=FALSE}
+
+#' Calcul le classement final à partir d'u classement
+
+classement.final <- function(classement) {
+    classement %>% filter(journee==38) %>% select(eq, classement=classement.reel)  
+}
+
+#' Graphe de représentation des simulations d'une équipe
+
+graph.equipe <- function(sims, classements, equipe, typesim="saison") {
+    final <- classement.final(classements)
+    tmp <- sims[sims$typesim ==typesim & sims$eq==equipe,]
+    tmp$journee <- as.numeric(tmp$journee)
+    tmp.final <- as.numeric(final %>% filter(eq==equipe) %>% select(classement))
+    tmp.classement <- classements %>% filter(eq==equipe & journee<=38) %>% mutate(journee=journee-0.5)
+    ggplot(data=tmp) +
+        geom_tile(aes(x=journee, y=classement, fill=prob)) +
+        scale_y_reverse(limits=c(21,0), breaks=1:20) +
+        scale_x_continuous(breaks=20:37) +
+        scale_fill_gradient(low="white", high="blue") +
+        geom_step(data=tmp.classement, aes(x=journee, y=classement.reel)) +
+        geom_hline(yintercept=tmp.final, col="red")
+}
+
+#' Graphe proba simulée d'arriver à la position n pour chaque équipe finalement
+#' arrivée à la position n
+
+graph.probas <- function(sims, classements, typesim="saison"){
+    tmp <- sims[sims$typesim==typesim,]
+    tmp$journee <- as.numeric(tmp$journee)
+    tmp <- classement.final(classements) %>% inner_join(tmp)
+    print(tmp)
+    ggplot(data=tmp) +
+        geom_tile(aes(x=journee, y=classement, fill=prob)) +
+        scale_y_reverse(limits=c(21,0), breaks=1:20) +
+        scale_x_continuous(breaks=20:37) +
+        scale_fill_gradient2(low="white", mid="blue", high="red", midpoint=50)
+}
+
+
+#' Graphe de comparaisons des prédictions de classement final
+
+graph.predictions <- function(sims, classements, typesim="saison") {
+
+    final <- classement.final(classements)
+    
+    ## Prédictions : classement de la journée
+    tmp.classements <- classements %>% filter(journee<=37) 
+    tmp.classements <- tmp.classements %>%
+        left_join(final) %>%
+        select(journee, classement.reel, classement) %>%
+        group_by(journee) %>%
+        summarise(nb=sum(classement.reel==classement))
+
+    ## Prédictions simulations 1 : on garde pour chaque classement le max de prob
+    tmp <- sims[sims$typesim==typesim,]
+    tmp1 <- tmp %>%
+        group_by(journee, classement) %>%
+        filter(prob==max(prob)) %>%
+        left_join(final, by="eq")
+    tmp1 <-tmp1 %>%
+        group_by(journee) %>%
+        summarise(nb=sum(classement.x==classement.y))
+
+    ## Prédictions simulations 1 : on garde pour chaque équipe le max de prob
+    tmp2 <- tmp %>%
+        group_by(journee, eq) %>%
+        filter(prob==max(prob)) %>%
+        left_join(final, by="eq")
+    tmp2 <-tmp2 %>%
+        group_by(journee) %>%
+        summarise(nb=sum(classement.x==classement.y))
+
+    tmp.classements$id <- "Classement"
+    tmp1$id <- "Simulations 1"
+    tmp2$id <- "Simulations 2"
+    tmp <- rbindlist(list(tmp.classements, tmp1, tmp2))
+    ggplot() +
+        geom_line(data=tmp, aes(x=journee, y=nb, color=id)) +
+        scale_x_continuous("Journée", breaks=20:37) +
+        scale_y_continuous("Nombre d'équipes prédites", limits=c(0,20), breaks=0:20) +
+        scale_color_discrete("Méthode")
+}
+
+```
+
+Rappel des épisodes précédents : j'ai mis en place depuis quelques semaines
+[/app/sim](un outil permettant de faire des simulations de fins de championnat
+de football), et je l'ai appliqué aux championnats de Ligue 1, Ligue 2 et
+National depuis la 20ème journée. Le détail de la méthodologie de ces
+simulations est indiqué dans l'application ou dans le
+[/posts/2014-03-simulation-ligue1.html](billet correspondant).
+
+Comme les championnats sont désormais terminés, je me suis dit que ça pouvait
+être intéressant d'essayer d'évaluer si au final ces simulations ont apportés
+des informations utiles, ou si, derrière de savants concepts
+mathématiques, leur utilité se réduisait en fait à celle d'un 
+
+
+
+
+```{r graphfun, echo=FALSE, results="hide", cache=FALSE, message=FALSE}
+
+graph.equipe(sims.l1, classements.l1, "Rennes", "15j")
+graph.equipe(sims.l2, classements.l2, "Lens", "15j")
+
+graph.probas(sims.l1, classements.l1)
+graph.probas(sims.l2, classements.l2)
+
+graph.predictions(sims.l1, classements.l1)
+graph.predictions(sims.l2, classements.l2)
+graph.predictions(sims.l1, classements.l1, typesim="15j")
+graph.predictions(sims.l2, classements.l2, typesim="15j")
+
+```
+
+
+
+
+
+
+
+
