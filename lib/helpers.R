@@ -70,24 +70,27 @@ calcule.points.journee <- function(results, jour) {
     ## Filtre les dates à venir
     tmp <- results[results$journee<=jour,]
     ## Passage en format "long"
-    tmp <- melt(tmp,measure.vars=c("dom", "ext"),id.vars=c("result"))
-    setnames(tmp, c("result","dom","eq"))
+    tmp <- melt(tmp,measure.vars=c("dom", "ext"),id.vars=c("result", "buts.dom", "buts.ext"))
+    setnames(tmp, c("result","buts.dom", "buts.ext","dom","eq"))
     ## Recodage du nombre de points par match
     tmp$res <- 0
     tmp$res[tmp$result==tmp$dom] <- 3
     tmp$res[tmp$result=="nul"] <- 1
+    ## Recodage du nombre de buts
+    tmp$buts.pour <- ifelse(tmp$dom=="dom", tmp$buts.dom, tmp$buts.ext)
+    tmp$buts.contre <- ifelse(tmp$dom=="dom", tmp$buts.ext, tmp$buts.dom)
     ## Somme
-    tmp <- tmp[,list(points=sum(res)),by="eq"]
+    tmp <- tmp[,list(points=sum(res),buts.pour=sum(buts.pour), buts.contre=sum(buts.contre)),by="eq"]
     ## Points de pénalité pour Nantes et Bastia (Ligue 1)
     tmp$points[tmp$eq=="Nantes"] <- tmp$points[tmp$eq=="Nantes"]-1
     tmp$points[tmp$eq=="Bastia"] <- tmp$points[tmp$eq=="Bastia"]+2
     ## Points de pénalité pour Vannes (National)
     tmp$points[tmp$eq=="Vannes"] <- tmp$points[tmp$eq=="Vannes"]-1
+    ## Calcul différences de buts
+    tmp$diff <- tmp$buts.pour - tmp$buts.contre
     ## Ajout du classement
-    tmp <- tmp[order(tmp$points, decreasing=TRUE),]
+    tmp <- tmp %>% arrange(desc(points), desc(diff))
     tmp$classement <- 1:nrow(tmp)
-    ## Si même nombre de points, même classement
-    tmp <- tmp %.% group_by(points) %.% mutate(classement=min(classement))
     return(tmp)
 }
 
@@ -129,3 +132,82 @@ simulation <- function(i, d, probas, journee=NULL) {
 }
 
 
+#' Fonction qui charge les données pour l'ensemble des résultats
+#' du championnat à partir d'une page de maxifoot.fr. Utilisée
+#' dans le billet bilan
+
+scrape.championnat <- function(url) {
+
+    doc <- htmlParse(url, encoding="latin-1")
+    tableNodes <- getNodeSet(doc, "//table[@class='cd1']")
+    tables <- lapply(tableNodes, readHTMLTable)
+    for (i in 1:length(tables)) {
+        names(tables[[i]]) <- c("eq.dom","eq.ext","score")
+        tables[[i]]$journee <- i
+    }
+
+    results <- rbindlist(tables)
+
+    ## Recodages
+
+    results <- within(results, {
+        ## Matchs à venir
+        score[score=="-"] <- NA
+        score[!grepl("-", score)] <- NA
+        ## Extraction score
+        buts.dom <- as.numeric(gsub("-[0-9]+$","",score))
+        buts.ext <- as.numeric(gsub("^[0-9]+-","",score))
+        ## Recodage résultat
+        result <- NA
+        result[buts.dom > buts.ext] <- "dom"
+        result[buts.dom < buts.ext] <- "ext"
+        result[buts.dom == buts.ext] <- "nul"
+        ## Recodage équipes
+        dom <- as.character(eq.dom)
+        ext <- as.character(eq.ext)
+    })
+
+    results <- results[,list(dom,ext,buts.dom,buts.ext,journee,result)]
+
+    return(results)
+}
+
+#' Fonction qui calcule les classements aux différentes journées d'un'
+#' championnat à partir de la liste des résultats des matchs. Utilisée
+#' pour les bilans.
+
+calcule.classements <- function(results) {
+    classements <- rbindlist(lapply(20:38, function(i) {
+        df <- calcule.points.journee(results,i)
+        df$journee <- i
+        df
+    }))
+    classements <- as.data.frame(classements)
+    names(classements) <- c("eq", "points.reel", "pour", "contre", "diff", "classement.reel", "journee")
+    return(classements)
+
+}
+
+
+#' Charge et agrège l'ensemble des résultats des simulations d'un championnat.
+#' Utilisée pour les bilans.
+
+load.simulations <- function(dir) {
+    rdata_files <- list.files(path=dir, pattern="*.Rdata", full.names=TRUE)
+    journees <- gsub('^.*/(\\d+?)_probas.*$', '\\1', rdata_files)
+    typesim <- gsub('^.*/\\d+?_probas_(.*?)\\.Rdata.*$', '\\1', rdata_files)
+    
+    d <- data.frame(journee=numeric(), typesim=character(), eq=character(), classement=numeric(), n =numeric(), prob=character())
+
+    for (i in 1:length(rdata_files)) {
+        load(rdata_files[i])
+        tab$journee <- journees[i]
+        tab$typesim <- typesim[i]
+        d <- rbind(d, as.data.frame(tab))
+    }
+    d$prob <- as.numeric(gsub(" %", "", d$prob))
+    d$eq <- as.character(d$eq)
+    d$journee <- as.numeric(d$journee)
+
+    return(d)
+}
