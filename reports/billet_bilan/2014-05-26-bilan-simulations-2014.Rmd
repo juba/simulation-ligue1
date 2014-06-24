@@ -50,15 +50,17 @@ library(ggplot2)
 ```{r scrape, echo=FALSE, results="hide", cache=FALSE, message=FALSE}
 
 ## Scraping des résultats de Ligue 1
-results.l1 <- scrape.championnat("http://www.maxifoot.fr/calendrier-ligue1.php")
+#results.l1 <- scrape.championnat("http://www.maxifoot.fr/calendrier-ligue1-2013-2014.htm")
+load("cache/results.l1.Rdata")
 classements.l1 <- calcule.classements(results.l1)
 
 ## Scraping des résultats de Ligue 2
-results.l2 <- scrape.championnat("http://www.maxifoot.fr/calendrier-ligue2.php")
+#results.l2 <- scrape.championnat("http://www.maxifoot.fr/calendrier-ligue2.php")
+load("cache/results.l2.Rdata")
 classements.l2 <- calcule.classements(results.l2)
 
-#cache("results.l1")
-#cache("results.l2")
+cache("results.l1")
+cache("results.l2")
 
 ```
 
@@ -165,9 +167,11 @@ simulations est indiqué dans l'application ou dans le
 [/posts/2014-03-simulation-ligue1.html](billet correspondant).
 
 Comme les championnats sont désormais terminés, je me suis dit que ça pouvait
-être intéressant d'essayer d'évaluer si au final ces simulations ont apportés
-des informations utiles, ou si, derrière de savants concepts
-mathématiques, leur utilité se réduisait en fait à celle d'un 
+être intéressant d'essayer d'évaluer si au final ces simulations ont apporté
+des informations utiles, ou si, derrière de savants concepts mathématiques,
+leur utilité se réduisait en fait à celle d'un bon d'achat chez Franprix pour
+un joueur de Monaco.
+
 
 
 
@@ -175,6 +179,8 @@ mathématiques, leur utilité se réduisait en fait à celle d'un
 ```{r graphfun, echo=FALSE, results="hide", cache=FALSE, message=FALSE}
 
 graph.equipe(sims.l1, classements.l1, "Rennes", "15j")
+graph.equipe(sims.l1, classements.l1, "Rennes")
+
 graph.equipe(sims.l2, classements.l2, "Lens", "15j")
 
 graph.probas(sims.l1, classements.l1)
