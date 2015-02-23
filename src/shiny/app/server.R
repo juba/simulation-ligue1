@@ -44,14 +44,14 @@ shinyServer(function(input, output) {
     output$pointsViolin <- renderText({
         filename <- paste0(input$journee,"_violin_",input$dyn,".png")
         file <- file.path(imagepath(), filename)
-        out <- paste0('<img src="',file,'" width="700" height="600" alt="" />')
+        out <- paste0('<img class="img-responsive" src="',file,'" alt="" />')
         HTML(out)
     })
     
     output$classProbs <- renderText({
         filename <- paste0(input$journee,"_probas_",input$dyn,".png")
         file <- file.path(imagepath(), filename)
-        out <- paste0('<img src="',file,'" width="700" height="700" alt="" />')
+        out <- paste0('<img class="img-responsive" src="',file,'" alt="" />')
         HTML(out)
     })
     
