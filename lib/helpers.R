@@ -25,8 +25,8 @@ table.probas <- function(d, derniers=NULL, journee=NULL) {
     tmp$res[tmp$result==tmp$dom] <- "G"
     tmp$res[tmp$result=="nul"] <- "N"
     ## Calcul des pourcentages
-    tmp <- tmp %.% group_by(eq,dom) %.% summarize(nb=n(), n=sum(res=="N"), g=sum(res=="G"), p=sum(res=="P"))
-    tmp <- tmp %.% mutate(prob.g=g/nb,prob.n=n/nb,prob.p=p/nb)
+    tmp <- tmp %>% group_by(eq,dom) %>% summarize(nb=n(), n=sum(res=="N"), g=sum(res=="G"), p=sum(res=="P"))
+    tmp <- tmp %>% mutate(prob.g=g/nb,prob.n=n/nb,prob.p=p/nb)
     ## Retour en format "large"
     tmp <- reshape(tmp, direction="wide", idvar="eq", timevar="dom")
     tmp <- tmp[,list(eq,prob.g.dom,prob.p.dom,prob.g.ext,prob.p.ext)]
