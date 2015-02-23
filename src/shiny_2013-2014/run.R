@@ -9,7 +9,7 @@ options(mc.cores=detectCores())
 
 ## Création du répertoire de stockage des images et données
 file.base <- gsub(" ","_", paste(championnat, saison, sep="/"))
-file.base <- file.path("src/shiny/app/www/data/", file.base)
+file.base <- file.path("src/shiny_2013-2014//app/www/data/", file.base)
 dir.create(file.base, recursive=TRUE)
 
 

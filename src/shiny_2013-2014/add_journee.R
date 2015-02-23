@@ -19,9 +19,9 @@ add.journee <- function(championnat, saison, journee, nb.rep=5000) {
     
     d.url <- urls[[championnat]]
     cat("--- Scraping ---\n")
-    source("src/shiny/scrape.R", local=TRUE)
+    source("src/shiny_2013-2014/scrape.R", local=TRUE)
     cat("--- Running simulations ---\n")
-    source("src/shiny/run.R", local=TRUE)
+    source("src/shiny_2013-2014/run.R", local=TRUE)
 }
 
 ## Ajout d'une nouvelle journée
