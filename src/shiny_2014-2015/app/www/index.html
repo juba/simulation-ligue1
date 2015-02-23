@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script src="shared/jquery.js" type="text/javascript"></script>
+  <script src="shared/shiny.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="shared/shiny.css"/>
+  <link rel="stylesheet" type="text/css" href="shared/slider/css/jquery.slider.min.css"/>
+  <script src="shared/slider/js/jquery.slider.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="shared/bootstrap/css/bootstrap.min.css"/>
+  <script src="shared/bootstrap/js/bootstrap.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" type="text/css" href="shared/bootstrap/css/bootstrap-responsive.min.css"/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="perso.css"/>
+  <link rel="shortcut icon" href="http://data.nozav.org/favicon.ico">
+
+
+  
+  <title>Simulations de fins de championnats 2014/2015</title>
+</head>
+<body>
+  <nav class="navbar navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-responsive-collapse">
+	  <span class="sr-only">Toggle</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+	</button>
+	<a class="navbar-brand" href="/">data.nozav.org</a>
+      </div>
+      <div class="collapse navbar-collapse" id="navbar-responsive-collapse">
+        <ul class="nav navbar-nav pull-right hidden-print">
+          <li>
+            <a title="Twitter" href="https://twitter.com/nozav">
+              <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+	      <span class="sr-only">Twitter</span>
+            </a>
+          </li>
+	  <li>
+            <a title="À propos" href="/about.html">
+              <i class="fa fa-user fa-lg"></i>
+	      <span class="sr-only">À propos</span>
+            </a>
+          </li>
+          <li>
+            <a href="/atom.xml" title="Atom Feed">
+              <i class="fa fa-rss fa-lg"></i>
+	      <span class="sr-only">Atom feed</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>  
+  <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12" style="padding: 10px 20px;">
+      <h1>Simulations de fins de championnats 2014/2015</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <form class="well">
+	<div class ="form-group">
+	   <label for="championnat">Championnat :</label>
+           <select id="championnat" class="form-control">
+             <option value="Ligue 1" selected="selected">Ligue 1</option>
+             <option value="Ligue 2">Ligue 2</option>
+             <option value="National">National</option>
+           </select>
+	</div>
+        <div id="journee" class="shiny-html-output">
+	</div>
+	<div id="dynamique" class="shiny-html-output shiny-bound-output">
+	  <div id="dyn" class="form-group shiny-input-radiogroup shiny-bound-input">
+	    <label for="dyn">Dynamique sur  :</label>
+	    <div class="radio">
+	      <label>
+	        <input type="radio" name="dyn" id="dyn1" value="saison">
+                Saison entière
+    	      </label>
+	    </div>
+	    <div class="radio">
+	      <label>
+	        <input type="radio" name="dyn" id="dyn2" value="15j" checked="checked">
+	        15 journées précédentes
+	      </label>
+	    </div>
+	  </div>
+	</div>
+	<hr />
+	<div id="moretext" style="margin-top: 20px;">
+	  <p><a href="https://github.com/juba/simulation-ligue1">Code source</a></p>
+	</div>
+      </form>
+    </div>
+    <div class="col-md-8">
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#tab-3262-1" data-toggle="tab">Points</a>
+          </li>
+          <li>
+            <a href="#tab-3262-2" data-toggle="tab">Classement</a>
+          </li>
+          <li>
+            <a href="#tab-3262-3" data-toggle="tab">Probas par équipe</a>
+          </li>
+          <li>
+            <a href="#tab-3262-4" data-toggle="tab">Probas par classement</a>
+          </li>
+          <li>
+            <a href="#tab-3262-5" data-toggle="tab">À propos</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade in active" id="tab-3262-1">
+            <div class="loading" style="width: 800px; height:600px;">
+                <div id="pointsViolin" class="shiny-html-output">
+                </div>
+            </div>
+            <p>Répartition du nombre de points obtenus par chaque équipe à la fin du championnat. Plus la "patate" est haute, plus la probabilité du nombre de points correspondants est élevée.</p>
+          </div>
+          <div class="tab-pane fade" id="tab-3262-2">
+            <div class="loading" style="width: 800px; height:600px;">
+                <div id="classProbs" class="shiny-html-output">
+                </div>
+            </div>
+            <p>Probabilités de classement final pour l'ensemble des équipes.</p>
+          </div>
+          <div class="tab-pane fade" id="tab-3262-3">
+	    <p>Sélectionnez une équipe pour afficher les différents classements possibles à la fin de la
+	    saison et les probabilités correspondantes.</p>
+            <div id="eq" class="shiny-html-output"></div>
+            <div id="tabProbEq" class="shiny-html-output"></div>
+          </div>
+          <div class="tab-pane fade" id="tab-3262-4">
+	    <p>Sélectionnez une position dans le classement final pour afficher les probabilités des
+	      différentes équipes de finir à cette place.</p>
+            <div id="classement" class="shiny-html-output"></div>
+            <div id="tabProbClass" class="shiny-html-output"></div>
+          </div>
+          <div class="tab-pane fade" id="tab-3262-5">
+	    <h4>Avertissement préalable</h4>
+	    <p>Cette application a été développée pour le plaisir, et ne fournit aucune garantie quant à
+	      l'exactitude ou la validité des résultats affichés. Ceux-ci ne sont que des probabilités, qui
+	      ne peuvent au mieux que donner des tendances.</p>
+	    <p>Le <a href="https://github.com/juba/simulation-ligue1">code
+	      source</a> de tout ceci est disponible pour quiconque voudrait
+	      réutiliser, modifier, adapter, etc.</p>
+	    <h4>Méthode</h4>
+	    <p>Cette application présente le résultat de simulations de la fin de plusieurs championnats
+	      de football. Le principe est de tirer au sort le résultat de tous les matchs restants, et
+	      de représenter les différents nombres de points et classements correspondant au final.</p>
+	    <p>En pratique, cela se passe de la manière suivante&nbsp;:</p>
+	    <ul>
+	      <li>On passe en revue les journées déjà jouées, et on calcule le pourcentage de victoires,
+		de nuls et de défaites, à domicile et à l'extérieur, pour chaque équipe. Ce calcul
+		s'effectue soit sur toute la saison déjà écoulée, soit sur les 15 dernières
+		journées.</li>
+	      <li>On interprète ces pourcentages de victoires/nuls/défaites pour chaque équipe comme
+		des probabilités de victoires/nuls/défaites pour les matchs à venir. On fait donc
+		l'hypothèse forte (et en général fausse) que la dynamique de chaque équipe pour les
+		matchs à venir sera exactement la même que celle calculée sur les matchs déjà joués.</li>
+	      <li>On passe ensuite en revue les différents matchs à venir. Pour chacun de ces matchs
+		on calcule la probabilité d'une victoire à domicile, d'un nul ou d'une victoire à l'extérieur
+		en combinant les probabilités calculées des deux équipes qui se rencontrent.</li>
+	      <li>On tire ensuite au hasard le résultat de chaque match à venir, en tenant compte des
+		probabilités de victoire à domicile et de victoire à l'extérieur calculées à l'étape
+		précédente.</li>
+	      <li>Une fois l'issue de tous les matchs tirée au sort, on calcule le nombre de points et
+		le classement pour chaque équipe à la fin du championnat.</li>
+	    </ul>
+	    <p>Effectuer une seule simulation de ce type n'a pas de sens, car le résultat est très aléatoire.
+	      On effectue donc à chaque fois <strong>5000</strong> simulations et on stocke les
+	      résultats de chaque équipe. Ceci permet d'avoir 5000 issues de championnat possibles, et
+	      de déterminer lesquelles sont les plus fréquentes, les plus improbables, etc. Ce sont
+	      ces résultats qui sont représentés ici.</p>
+	    <h4>Limites</h4>
+	    <p>Cette méthode n'est évidemment qu'une méthode possible parmi
+	    d'autres. L'avantage est qu'elle prend en compte si le match est
+	    joué à domicile ou à l'extérieur, ainsi que le niveau des équipes,
+	    mesuré par leurs résultats précédents.</p>
+	    <p>Mais elle a également plusieurs limites&nbsp;:</p>
+	    <ul>
+	      <li>elle “fige” le niveau d'une équipe à celui de la dernière
+	      journée connnue, et ne peut évidemment pas prendre en compte des
+	      dynamiques propres à chaque équipe qui interviendraient pendant
+	      les journées à venir.</li>
+	      <li>elle ne prend pas en compte les événements tels que les
+	      blessures ou le fait que certaines équipes jouent plus de matchs
+	      que d'autres.</li>
+	      <li>elle ne tient pas compte des aspects tactiques ou du fait
+	      que le jeu de certaines équipes convient plus ou moins bien à
+		d'autres.</li>
+	    </ul>
+	    <p>Bref, cette méthode ne prend pas en compte tout ce qui fait l'intérêt du football&nbsp;!</p>
+	    <h4>Liens et crédits</h4>
+	    <ul>
+          
+	      <li>Les résultats et le calendrier des matchs de Ligue 1 et Ligue 2 sont extraits automatiquement de
+		<a href="http://www.maxifoot.fr/calendrier-ligue1.php">la page Calendrier</a> du site
+		Maxifoot.</li>
+          <li>Les résultats et calendriers des matchs de National proviennent du site <a href="http://www.sports.fr/football/national/resultats.html">sports.fr</a>. Le script de récupération de ces résultats a été développé par <a href="https://twitter.com/jpdarky">Jean-Pierre Darky</a>.</li>
+	      <li><a href="http://www.grappa.univ-lille3.fr/~torre/Football/">Fabien Torre</a> met également
+		en ligne, et depuis bien plus longtemps, des simulations de fins de championnat, avec une méthode
+		différente mais assez semblable (je n'avais pas connaissance de ses travaux avant d'avoir développé
+		cette application).</li>
+	    </ul>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
