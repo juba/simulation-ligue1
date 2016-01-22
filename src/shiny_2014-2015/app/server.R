@@ -1,6 +1,6 @@
 library(dplyr)
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
 
     imagepath <- reactive({
         tmp <- gsub(" ","_", paste(input$championnat, saison, sep="/"))
@@ -14,7 +14,7 @@ shinyServer(function(input, output) {
         tmp
     })
     
-     output$journee <- renderUI({
+     output$journeeUI <- renderUI({
          tmp <- datas[datas$championnat==input$championnat &
                       datas$saison==saison,]
          choices <- tmp$journee.max:tmp$journee.min

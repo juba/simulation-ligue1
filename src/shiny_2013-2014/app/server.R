@@ -13,7 +13,7 @@ shinyServer(function(input, output) {
         tmp
     })
     
-     output$journee <- renderUI({
+     output$journeeUI <- renderUI({
          tmp <- datas[datas$championnat==input$championnat &
                       datas$saison==saison,]
          choices <- tmp$journee.max:tmp$journee.min
