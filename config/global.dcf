@@ -1,8 +1,11 @@
-data_loading: off
-cache_loading: off
-munging: off
-logging: off
-load_libraries: on
+data_loading: FALSE
+cache_loading: FALSE
+munging: FALSE
+logging: FALSE
+load_libraries: TRUE
 libraries: reshape2, dplyr, data.table, ggplot2
-as_factors: on
-data_tables: off
+as_factors: TRUE
+data_tables: FALSE
+version: 0.6
+recursive_loading: FALSE
+attach_internal_libraries: TRUE
