@@ -1,0 +1,67 @@
+<h4>Avertissement préalable</h4>
+<p>Cette application a été développée pour le plaisir, et ne fournit aucune
+  garantie quant à l'exactitude ou la validité des résultats affichés. Ceux-ci
+  ne sont que des probabilités, qui ne peuvent au mieux que donner des
+  tendances.</p>
+<p>Le <a href="https://github.com/juba/simulation-ligue1">code source</a>
+  de tout ceci est disponible pour quiconque voudrait réutiliser, modifier,
+  adapter, etc.</p>
+<h4>Méthode</h4>
+<p>Cette application présente le résultat de simulations de la fin de plusieurs championnats
+  de football. Le principe est de tirer au sort le résultat de tous les matchs restants, et
+  de représenter les différents nombres de points et classements correspondant au final.</p>
+<p>En pratique, cela se passe de la manière suivante&nbsp;:</p>
+<ul>
+  <li>On passe en revue les journées déjà jouées, et on calcule le pourcentage de victoires,
+    de nuls et de défaites, à domicile et à l'extérieur, pour chaque équipe. Ce calcul
+    s'effectue soit sur toute la saison déjà écoulée, soit sur les 15 dernières
+    journées.</li>
+  <li>On interprète ces pourcentages de victoires/nuls/défaites pour chaque équipe comme
+    des probabilités de victoires/nuls/défaites pour les matchs à venir. On fait donc
+    l'hypothèse forte (et en général fausse) que la dynamique de chaque équipe pour les
+    matchs à venir sera exactement la même que celle calculée sur les matchs déjà joués.</li>
+  <li>On passe ensuite en revue les différents matchs à venir. Pour chacun de ces matchs
+    on calcule la probabilité d'une victoire à domicile, d'un nul ou d'une victoire à l'extérieur
+    en combinant les probabilités calculées des deux équipes qui se rencontrent.</li>
+  <li>On tire ensuite au hasard le résultat de chaque match à venir, en tenant compte des
+    probabilités de victoire à domicile et de victoire à l'extérieur calculées à l'étape
+    précédente.</li>
+  <li>Une fois l'issue de tous les matchs tirée au sort, on calcule le nombre de points et
+    le classement pour chaque équipe à la fin du championnat.</li>
+</ul>
+<p>Effectuer une seule simulation de ce type n'a pas de sens, car le résultat est très aléatoire.
+  On effectue donc à chaque fois <strong>5000</strong> simulations et on stocke les
+  résultats de chaque équipe. Ceci permet d'avoir 5000 issues de championnat possibles, et
+  de déterminer lesquelles sont les plus fréquentes, les plus improbables, etc. Ce sont
+  ces résultats qui sont représentés ici.</p>
+<h4>Limites</h4>
+<p>Cette méthode n'est évidemment qu'une méthode possible parmi
+  d'autres. L'avantage est qu'elle prend en compte si le match est
+  joué à domicile ou à l'extérieur, ainsi que le niveau des équipes,
+  mesuré par leurs résultats précédents.</p>
+<p>Mais elle a également plusieurs limites&nbsp;:</p>
+<ul>
+  <li>elle “fige” le niveau d'une équipe à celui de la dernière
+    journée connnue, et ne peut évidemment pas prendre en compte des
+    dynamiques propres à chaque équipe qui interviendraient pendant
+    les journées à venir.</li>
+  <li>elle ne prend pas en compte les événements tels que les
+    blessures ou le fait que certaines équipes jouent plus de matchs
+    que d'autres.</li>
+  <li>elle ne tient pas compte des aspects tactiques ou du fait
+    que le jeu de certaines équipes convient plus ou moins bien à
+    d'autres.</li>
+</ul>
+<p>Bref, cette méthode ne prend pas en compte tout ce qui fait l'intérêt du football&nbsp;!</p>
+<h4>Liens et crédits</h4>
+<ul>
+
+  <li>Les résultats et le calendrier des matchs de Ligue 1 et Ligue 2 sont extraits automatiquement de
+    <a href="http://www.maxifoot.fr/calendrier-ligue1.php">la page Calendrier</a> du site
+    Maxifoot.</li>
+  <li>Les résultats et calendriers des matchs de National proviennent du site <a href="http://www.sports.fr/football/national/resultats.html">sports.fr</a>. Le script de récupération de ces résultats a été développé par <a href="https://twitter.com/jpdarky">Jean-Pierre Darky</a>.</li>
+  <li><a href="http://www.grappa.univ-lille3.fr/~torre/Football/">Fabien Torre</a> met également
+    en ligne, et depuis bien plus longtemps, des simulations de fins de championnat, avec une méthode
+    différente mais assez semblable (je n'avais pas connaissance de ses travaux avant d'avoir développé
+    cette application).</li>
+</ul>

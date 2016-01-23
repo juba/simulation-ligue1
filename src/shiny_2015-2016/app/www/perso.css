@@ -1,0 +1,49 @@
+body {
+    font-family: "Open Sans", sans-serif;
+    padding-top: 55px;
+}
+
+h1 {
+    padding-left: 15px;
+    margin-bottom: 30px;
+    font-weight: normal;
+    font-size: 2.2em;
+    text-transform: uppercase;
+    line-height: 2em;
+    
+}
+
+.loading {
+    display: block;
+    background: url("img/loader.gif") no-repeat middle center;
+}
+
+.navbar {position:relative;padding-right:15px;padding-left:15px;margin-bottom:20px;background-color:#eee;border-radius:4px;text-transform:uppercase;}
+
+.container-fluid {
+    max-width: 1250px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar {box-shadow: rgb(221, 221, 221) 0px 5px 10px 0px;}
+
+.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030;border-radius:0;top:0;}
+
+.navbar-brand,
+.navbar-collapse a {
+    color: #777;
+}
+
+.navbar-brand {font-size: 19px;}
+
+.navbar-brand:hover,
+.navbar-brand:focus,
+.navbar-collapse a:hover,
+.navbar-collapse a:focus {
+    color: #5e5e5e;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.nav-tabs { margin-bottom: 25px;}
