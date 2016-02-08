@@ -26,27 +26,27 @@ add.journee <- function(championnat, saison, journee, nb.rep=5000) {
 
 ## Ajout d'une nouvelle journée
 
-add.journee("Ligue 1", "2015-2016", 21, 5000)
+add.journee("Ligue 1", "2015-2016", 25, 5000)
 
-add.journee("Ligue 2", "2015-2016", 21, 5000)
+add.journee("Ligue 2", "2015-2016", 25, 5000)
 
-add.journee("National", "2015-2016", 18, 5000)
+add.journee("National", "2015-2016", 20, 5000)
 
 
-# for (i in 21:26) {
-#     cat(paste("\n\n---",i,"---\n"))
-#     add.journee("Ligue 1", "2015-2016", i, 5000)
-# }
-# 
-# for (i in 20:25) {
-#     cat(paste("\n\n---",i,"---\n"))
-#     add.journee("Ligue 2", "2015-2016", i, 5000)
-# }
-# 
-# for (i in 19:23) {
-#     cat(paste("\n\n---",i,"---\n"))
-#     add.journee("National", "2015-2016", i, 5000)
-# }
+for (i in 22:25) {
+     cat(paste("\n\n---",i,"---\n"))
+     add.journee("Ligue 1", "2015-2016", i, 5000)
+}
+ 
+for (i in 22:25) {
+    cat(paste("\n\n---",i,"---\n"))
+    add.journee("Ligue 2", "2015-2016", i, 5000)
+}
+
+for (i in 19:20) {
+    cat(paste("\n\n---",i,"---\n"))
+    add.journee("National", "2015-2016", i, 5000)
+}
 
 #championnat <- "Ligue 1"
 #journee <- 25
