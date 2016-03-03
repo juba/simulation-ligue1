@@ -68,6 +68,8 @@ shinyServer(function(input, output, session) {
     output$tabProbClass <- renderTable({
         tmp <- tab() %>% 
             filter(classement==input$classement) %>% 
+            mutate(num_prob=as.numeric(gsub(" %","",prob))) %>%
+            arrange(desc(num_prob)) %>%
             select(eq, prob) %>%
             rename(Équipe=eq, Probabilité=prob)
         tmp
