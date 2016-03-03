@@ -6,9 +6,9 @@ datas <- data.frame(championnat=character(),
                     journee.min=numeric(),
                     journee.max=numeric(),
                     stringsAsFactors=FALSE)
-datas[1,] <- c("Ligue 1",  "2015-2016", 21, 25)
-datas[2,] <- c("Ligue 2",  "2015-2016", 21, 24)
-datas[3,] <- c("National", "2015-2016", 18, 20)
+datas[1,] <- c("Ligue 1",  "2015-2016", 21, 28)
+datas[2,] <- c("Ligue 2",  "2015-2016", 21, 28)
+datas[3,] <- c("National", "2015-2016", 18, 22)
 
 saison <- "2015-2016"
 
